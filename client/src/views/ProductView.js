@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { navigate } from '@reach/router';
+import DeleteButton from '../components/DeleteButton';
 
 
 const ProductView = (props) => {
@@ -29,7 +30,7 @@ const ProductView = (props) => {
             <div className="row my-2 text-center">Price: ${product.price}</div>
             <div className="row my-2 text-center">Description: {product.description}</div>
             <div className="row my-2 text-center">
-                <button onClick={() => deleteProduct(product._id)} className="btn btn-danger">Delete</button>
+                <DeleteButton products = {products} setproducts={setproducts} productId={product._id}/>
             </div>
         </div>
      );

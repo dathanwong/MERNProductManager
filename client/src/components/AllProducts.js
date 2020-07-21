@@ -1,17 +1,11 @@
 import React from 'react';
 import {Link, navigate} from '@reach/router';
-import Axios from 'axios';
+import DeleteButton from './DeleteButton';
 
 const AllProducts = (props) => {
 
     const {products, setproducts} = props;
     console.log(products);
-
-    function deleteProduct(id){
-        Axios.delete('http://localhost:8000/api/products/'+id)
-            .then(() => setproducts(products.filter(product => product._id != id)))
-            .catch(err => console.log(err));
-    }
 
     function goToEdit(id){
         navigate('/'+id+'/edit');
@@ -29,7 +23,7 @@ const AllProducts = (props) => {
                 <div key={product._id} className="row">
                     <Link className="col text-center" to={"/"+product._id}>{product.title}</Link>
                     <button onClick={e => goToEdit(product._id)} className="btn btn-primary">Edit</button>
-                    <button onClick={e => deleteProduct(product._id)} className="btn btn-danger">Delete</button>
+                    <DeleteButton products={products} setproducts={setproducts} productId={product._id} />
                 </div>
                 );} 
             )

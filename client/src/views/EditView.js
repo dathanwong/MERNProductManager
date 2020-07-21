@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import Axios from 'axios';
 import { navigate } from '@reach/router';
+import Form from '../components/Form';
 
 const EditView = (props) => {
 
-    const{setproducts} = props;
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() =>{
         Axios.get('http://localhost:8000/api/products/'+props.id)
@@ -15,18 +16,13 @@ const EditView = (props) => {
                 setTitle(res.data.title);
                 setPrice(res.data.price);
                 setDescription(res.data.description);
+                setLoaded(true);
             } )
             .catch((err) => console.log(err));
     }, [])
 
-    function handleSubmit(e){
-        e.preventDefault();
-        const product = {
-            title,
-            price,
-            description
-        };
-        Axios.put('http://localhost:8000/api/products/'+props.id, product)
+    function handleSubmit(newProduct){
+        Axios.put('http://localhost:8000/api/products/'+props.id, newProduct)
             .then(res =>{
                 console.log(res);
                 navigate('/');
@@ -34,26 +30,11 @@ const EditView = (props) => {
             .catch(err=>console.log(err));
     }
 
-    return ( 
+    return (
+        loaded && ( 
         <div className="container">
-            <form onSubmit={handleSubmit}>
-                <div className="row text-center">
-                    <label>Title:</label>
-                    <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
-                </div>
-                <div className="row text-center">
-                    <label>Price:</label>
-                    <input type="number" value={price} onChange={e => setPrice(e.target.value)}/>
-                </div>
-                <div className="row text-center">
-                    <label>Description:</label>
-                    <input type="text" value={description} onChange={e => setDescription(e.target.value)}/>
-                </div>
-                <div className="row text-center">
-                    <button type="submit" className="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
+            <Form onSubmitProp={handleSubmit} initialTitle = {title} initialPrice = {price} initialDescription={description}/>
+        </div>)
      );
 }
  
