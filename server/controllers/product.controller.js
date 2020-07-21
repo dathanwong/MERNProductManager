@@ -30,3 +30,15 @@ module.exports.findById = (req, res) =>{
         .then(product => res.json(product))
         .catch(err => console.log(err));
 }
+
+module.exports.deleteById = (req, res) =>{
+    Product.deleteOne({_id: req.params.id})
+        .then(product => res.json({message: req.params.id + " deleted"}))
+        .catch(err => res.json(err));
+}
+
+module.exports.updateProduct = (req, res) =>{
+    Product.updateOne({_id: req.params.id}, req.body, {new:true})
+        .then(response => res.json(response))
+        .catch(err => res.json(err));
+}

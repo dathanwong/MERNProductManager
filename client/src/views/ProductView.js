@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import { navigate } from '@reach/router';
 
 
 const ProductView = (props) => {
     
+    const {products, setproducts} = props;
     const [product, setProduct] = useState({});
 
     useEffect(() =>{
@@ -11,12 +13,24 @@ const ProductView = (props) => {
             .then((res) => setProduct(res.data))
             .catch(err => console.log(err));
     } ,[])
-    
+
+    function deleteProduct(id){
+        Axios.delete('http://localhost:8000/api/products/'+id)
+            .then(() =>{
+                setproducts(products.filter(product => product._id !== id));
+                navigate('/');
+            } )
+            .catch(err => console.log(err));
+    }
+
     return ( 
         <div className="container">
-            <div className="row text-center">{product.title}</div>
-            <div className="row text-center">Price: ${product.price}</div>
-            <div className="row text-center">Description: {product.description}</div>
+            <div className="row my-2 text-center">{product.title}</div>
+            <div className="row my-2 text-center">Price: ${product.price}</div>
+            <div className="row my-2 text-center">Description: {product.description}</div>
+            <div className="row my-2 text-center">
+                <button onClick={() => deleteProduct(product._id)} className="btn btn-danger">Delete</button>
+            </div>
         </div>
      );
 }

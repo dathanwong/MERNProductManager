@@ -9,7 +9,7 @@ const Main = (props) => {
     return (  
         <>
             <Home products = {products} setproducts = {setproducts}/>
-            <AllProducts products = {products}/>
+            <AllProducts products = {products} setproducts = {setproducts}/>
         </>
     );
 }
